@@ -1,10 +1,14 @@
 import React from "react";
 import { Platform, View, Text, Image, StyleSheet } from "react-native";
+import Constants from "expo-constants";
 import { LeaderboardEntry } from "../types";
 
 function proxyAvatarUri(uri: string): string {
   if (__DEV__ && Platform.OS !== "web") {
-    return uri.replace("https://kylecup.edwards.nz", "http://localhost:3333");
+    const debuggerHost =
+      Constants.expoConfig?.hostUri ?? Constants.experienceUrl ?? "";
+    const host = debuggerHost.split(":")[0] || "localhost";
+    return uri.replace("https://kylecup.edwards.nz", `http://${host}:3333`);
   }
   return uri;
 }

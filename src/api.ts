@@ -1,12 +1,20 @@
 import { Platform } from "react-native";
+import Constants from "expo-constants";
 import { Activity, LeaderboardEntry, MonthKey } from "./types";
 
-// iOS simulator can't reach external URLs through VPN/network filters,
-// so proxy through localhost in development on native platforms.
-const BASE_URL =
-  __DEV__ && Platform.OS !== "web"
-    ? "http://localhost:3333/api"
-    : "https://kylecup.edwards.nz/api";
+function getBaseUrl(): string {
+  if (!__DEV__ || Platform.OS === "web") {
+    return "https://kylecup.edwards.nz/api";
+  }
+  // In dev on native, use the proxy running on the same machine as Metro.
+  // Constants.expoGoConfig or the manifest debuggerHost gives us the LAN IP.
+  const debuggerHost =
+    Constants.expoConfig?.hostUri ?? Constants.experienceUrl ?? "";
+  const host = debuggerHost.split(":")[0] || "localhost";
+  return `http://${host}:3333/api`;
+}
+
+const BASE_URL = getBaseUrl();
 
 export async function fetchActivities(month: MonthKey): Promise<Activity[]> {
   const response = await fetch(`${BASE_URL}/${month}/activities`);

@@ -14,10 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "nz.edwards.kylecup"
+      "bundleIdentifier": "com.cubs.kylecup",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
-      "package": "nz.edwards.kylecup",
+      "package": "com.cubs.kylecup",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -27,6 +31,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fe33d08e-5440-4762-8805-8792f2614a94"
+      }
+    },
+    "owner": "benedwards44"
   }
 }
