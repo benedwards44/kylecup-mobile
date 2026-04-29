@@ -22,6 +22,14 @@
         }
       }
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "sounds": []
+        }
+      ]
+    ],
     "android": {
       "package": "com.cubs.kylecup",
       "adaptiveIcon": {

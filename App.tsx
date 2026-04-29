@@ -14,7 +14,12 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Activity, LeaderboardEntry, MONTHS, MonthKey } from "./src/types";
-import { fetchActivities, fetchLeaderboard, syncMonth } from "./src/api";
+import { fetchActivities, fetchLeaderboard, syncMonth, registerPushToken } from "./src/api";
+import {
+  registerForPushNotifications,
+  addNotificationReceivedListener,
+  addNotificationResponseListener,
+} from "./src/notifications";
 import MonthPicker from "./src/components/MonthPicker";
 import Leaderboard from "./src/components/Leaderboard";
 import ActivityList from "./src/components/ActivityList";
@@ -59,6 +64,27 @@ export default function App() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    registerForPushNotifications().then((token) => {
+      if (token) {
+        registerPushToken(token).catch(console.warn);
+      }
+    });
+
+    const receivedSub = addNotificationReceivedListener((notification) => {
+      console.log("Notification received:", notification);
+    });
+
+    const responseSub = addNotificationResponseListener((response) => {
+      console.log("Notification tapped:", response);
+    });
+
+    return () => {
+      receivedSub.remove();
+      responseSub.remove();
+    };
+  }, []);
 
   const handleSync = useCallback(async () => {
     setSyncing(true);

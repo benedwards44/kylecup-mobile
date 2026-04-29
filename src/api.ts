@@ -34,3 +34,12 @@ export async function syncMonth(month: MonthKey): Promise<void> {
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 }
+
+export async function registerPushToken(token: string): Promise<void> {
+  const response = await fetch(`${BASE_URL}/push-token/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+}
