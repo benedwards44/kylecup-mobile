@@ -3,16 +3,6 @@ import { Platform, View, Text, Image, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import { LeaderboardEntry } from "../types";
 
-function proxyAvatarUri(uri: string): string {
-  if (__DEV__ && Platform.OS !== "web") {
-    const debuggerHost =
-      Constants.expoConfig?.hostUri ?? Constants.experienceUrl ?? "";
-    const host = debuggerHost.split(":")[0] || "localhost";
-    return uri.replace("https://kylecup.edwards.nz", `http://${host}:3333`);
-  }
-  return uri;
-}
-
 interface Props {
   entries: LeaderboardEntry[];
 }
@@ -26,7 +16,7 @@ export default function Leaderboard({ entries }: Props) {
         return (
           <View key={entry.id} style={styles.row}>
             <Text style={styles.rank}>{index + 1}</Text>
-            <Image source={{ uri: proxyAvatarUri(entry.athlete_avatar) }} style={styles.avatar} />
+            <Image source={{ uri: entry.athlete_avatar }} style={styles.avatar} />
             <View style={styles.info}>
               <Text style={styles.name}>{entry.athlete_name}</Text>
               <Text style={styles.distance}>
