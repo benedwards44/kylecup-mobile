@@ -9,8 +9,18 @@ const server = http.createServer((req, res) => {
 
   res.setHeader("Access-Control-Allow-Origin", "*");
 
-  https
-    .get(targetUrl, (proxyRes) => {
+  const options = {
+    hostname: "kylecup.edwards.nz",
+    path: req.url,
+    method: req.method,
+    headers: {
+      host: "kylecup.edwards.nz",
+      accept: "application/json",
+    },
+  };
+
+  const proxyReq = https
+    .request(options, (proxyRes) => {
       res.writeHead(proxyRes.statusCode, proxyRes.headers);
       proxyRes.pipe(res);
     })
@@ -18,6 +28,8 @@ const server = http.createServer((req, res) => {
       res.writeHead(502);
       res.end(JSON.stringify({ error: err.message }));
     });
+
+  req.pipe(proxyReq);
 });
 
 server.listen(PORT, "0.0.0.0", () => {
